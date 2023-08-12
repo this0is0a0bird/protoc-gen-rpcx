@@ -2,14 +2,16 @@ module github.com/rpcxio/protoc-gen-rpcx
 
 go 1.19
 
-require google.golang.org/protobuf v1.30.0
+require (
+	github.com/cctip/cctip-service-client v1.1.0
+	google.golang.org/protobuf v1.30.0
+)
 
 require (
 	github.com/akutz/memconn v0.1.0 // indirect
 	github.com/apache/thrift v0.16.0 // indirect
 	github.com/armon/go-metrics v0.3.10 // indirect
 	github.com/cctip/cctip-common v1.1.78 // indirect
-	github.com/cctip/cctip-service-client v1.1.0 // indirect
 	github.com/cenk/backoff v2.2.1+incompatible // indirect
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

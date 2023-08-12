@@ -8,12 +8,12 @@ package greeter_service
 
 import (
 	context "context"
-
-	"github.com/cctip/cctip-common/rpcclient"
+	rpcclient "github.com/cctip/cctip-service-client/rpcclient"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = context.TODO
+var _ = rpcclient.GetRpcClient
 
 // ================== interface skeleton ===================
 type GreeterAble interface {
@@ -23,7 +23,7 @@ type GreeterAble interface {
 	SayHello(ctx context.Context, args *HelloRequest, reply *HelloReply) (err error)
 }
 
-// ================== client stub ===================
+//================== client stub ===================
 // Greeter is a client wrapped XClient.
 type GreeterClient struct {
 	service string
