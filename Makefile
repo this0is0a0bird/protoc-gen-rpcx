@@ -17,11 +17,11 @@ default: macos
 release: macos
 
 macos:
-	GO111MODULE=on	/usr/local/Cellar/go@1.19/1.19.7/bin/go build -v ${LDFLAGS} ${GCFLAGS} -o build/bin/${APPLICATION} ${CMD}
-	-cp -f build/bin/protoc-gen-rpcx /Users/mactang/bin/protoc-gen-rpcx
+	GO111MODULE=on	go build -v ${LDFLAGS} ${GCFLAGS} -o build/bin/${APPLICATION} ${CMD}
+	-cp -f build/bin/protoc-gen-rpcx ../../bin/protoc-gen-rpcx
 	-protoc -I . --go_out=paths=source_relative:. --rpcx_out=. --rpcx_opt=paths=source_relative helloworld.proto
-	-/usr/local/Cellar/go@1.19/1.19.7/bin/go mod tidy
-	-/usr/local/Cellar/go@1.19/1.19.7/bin/go mod vendor
+	-go mod tidy
+	-go mod vendor
 
 linux:
 	export GOPROXY=https://goproxy.io
