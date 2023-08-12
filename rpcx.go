@@ -96,15 +96,15 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 	//g.P()
 	g.P("//================== client stub ===================")
 	g.P(fmt.Sprintf(`// %[1]s is a client wrapped XClient.
-		type %[1]sClient struct{
+		type %[2]sClient struct{
 		}
-		// New%[1]sClient wraps a XClient as %[1]sClient.
+		// New%[1]sClient wraps a XClient as %[2]sClient.
 		// You can pass a shared XClient object created by NewXClientFor%[1]s.
-		func New%[1]sClient() *%[1]sClient {
-			return &%[1]sClient{}
+		func New%[1]sClient() *%[2]sClient {
+			return &%[2]sClient{}
 		}
 
-	`, serviceName, strings.Replace(string(file.GoPackageName), "_", "/", -1)))
+	`, serviceName, lcFirst(service.GoName)))
 	for _, method := range service.Methods {
 		generateClientCode(g, service, method)
 	}
@@ -162,7 +162,7 @@ func generateAbleCode(g *protogen.GeneratedFile, method *protogen.Method) {
 
 func generateClientCode(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
 	methodName := upperFirstLatter(method.GoName)
-	serviceName := upperFirstLatter(service.GoName)
+	//serviceName := upperFirstLatter(service.GoName)
 	inType := g.QualifiedGoIdent(method.Input.GoIdent)
 	outType := g.QualifiedGoIdent(method.Output.GoIdent)
 	g.P(fmt.Sprintf(`// %s is client rpc method as defined
@@ -171,7 +171,7 @@ func generateClientCode(g *protogen.GeneratedFile, service *protogen.Service, me
 			err = rpcclient.GetRpcClient().Call(ctx, ServiceName, "%s",args, reply)
 			return reply, err
 		}
-	`, methodName, serviceName, methodName, inType, outType, outType, method.GoName))
+	`, methodName, lcFirst(service.GoName), methodName, inType, outType, outType, method.GoName))
 }
 
 func generateOneClientCode(g *protogen.GeneratedFile, service *protogen.Service, method *protogen.Method) {
@@ -197,4 +197,15 @@ func upperFirstLatter(s string) string {
 		return strings.ToUpper(string(s[0]))
 	}
 	return strings.ToUpper(string(s[0])) + s[1:]
+}
+
+// lcFirst make the fisrt charater of given string  upper class
+func lcFirst(s string) string {
+	if len(s) == 0 {
+		return ""
+	}
+	if len(s) == 1 {
+		return strings.ToLower(string(s[0]))
+	}
+	return strings.ToLower(string(s[0])) + s[1:]
 }
