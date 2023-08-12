@@ -97,18 +97,11 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 	g.P("//================== client stub ===================")
 	g.P(fmt.Sprintf(`// %[1]s is a client wrapped XClient.
 		type %[1]sClient struct{
-			service string
 		}
 		// New%[1]sClient wraps a XClient as %[1]sClient.
 		// You can pass a shared XClient object created by NewXClientFor%[1]s.
-		func New%[1]sClient(service ...string) *%[1]sClient {
-			var serviceName string
-			if len(service) < 1{
-				serviceName = "%[2]s"
-            }else{
-				serviceName = service[0]
- 			}
-			return &%[1]sClient{service: serviceName}
+		func New%[1]sClient() *%[1]sClient {
+			return &%[1]sClient{}
 		}
 
 	`, serviceName, strings.Replace(string(file.GoPackageName), "_", "/", -1)))
@@ -175,7 +168,7 @@ func generateClientCode(g *protogen.GeneratedFile, service *protogen.Service, me
 	g.P(fmt.Sprintf(`// %s is client rpc method as defined
 		func (c *%sClient) %s(ctx context.Context, args *%s)(reply *%s, err error){
 			reply = &%s{}
-			err = rpcclient.GetRpcClient().Call(ctx, c.service, "%s",args, reply)
+			err = rpcclient.GetRpcClient().Call(ctx, ServiceName, "%s",args, reply)
 			return reply, err
 		}
 	`, methodName, serviceName, methodName, inType, outType, outType, method.GoName))

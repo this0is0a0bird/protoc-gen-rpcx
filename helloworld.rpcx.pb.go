@@ -26,24 +26,17 @@ type GreeterAble interface {
 //================== client stub ===================
 // Greeter is a client wrapped XClient.
 type GreeterClient struct {
-	service string
 }
 
 // NewGreeterClient wraps a XClient as GreeterClient.
 // You can pass a shared XClient object created by NewXClientForGreeter.
-func NewGreeterClient(service ...string) *GreeterClient {
-	var serviceName string
-	if len(service) < 1 {
-		serviceName = "greeter/service"
-	} else {
-		serviceName = service[0]
-	}
-	return &GreeterClient{service: serviceName}
+func NewGreeterClient() *GreeterClient {
+	return &GreeterClient{}
 }
 
 // SayHello is client rpc method as defined
 func (c *GreeterClient) SayHello(ctx context.Context, args *HelloRequest) (reply *HelloReply, err error) {
 	reply = &HelloReply{}
-	err = rpcclient.GetRpcClient().Call(ctx, c.service, "SayHello", args, reply)
+	err = rpcclient.GetRpcClient().Call(ctx, ServiceName, "SayHello", args, reply)
 	return reply, err
 }
