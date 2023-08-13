@@ -95,15 +95,23 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 
 	//g.P()
 	g.P("//================== client stub ===================")
+	g.P(fmt.Sprintf(`var (
+	_%[1]sClient *%[1]sClient
+	_clientOnce    sync.Once
+)`, lcFirst(service.GoName)))
 	g.P(fmt.Sprintf(`// %[1]s is a client wrapped XClient.
 		type %[2]sClient struct{
 		}
 		// New%[1]sClient wraps a XClient as %[2]sClient.
 		// You can pass a shared XClient object created by NewXClientFor%[1]s.
-		func New%[1]sClient() *%[2]sClient {
-			return &%[2]sClient{}
+		func Get%[1]sClient() *%[2]sClient {
+			if _%[2]sClient == nil {
+				_clientOnce.Do(func() {
+					_%[2]sClient = &%[2]sClient{}
+				})
+			}
+			return _%[2]sClient
 		}
-
 	`, serviceName, lcFirst(service.GoName)))
 	for _, method := range service.Methods {
 		generateClientCode(g, service, method)
